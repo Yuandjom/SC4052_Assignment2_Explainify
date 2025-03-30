@@ -254,21 +254,30 @@ export default function RepoPage() {
             </div>
 
             {/* Chat Log */}
-            <div className="flex-1 overflow-y-auto border border-border rounded-md bg-muted px-4 py-3 text-sm whitespace-pre-wrap leading-relaxed text-muted-foreground mb-4">
-              {chatHistory.length > 0 ? (
-                chatHistory.map((msg, idx) => (
-                  <div key={idx} className={`mb-2 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
-                    <p className={`${msg.role === 'assistant' ? 'font-medium' : 'italic'} `}>
-                      {msg.content}
+            <ScrollArea className="flex-1 overflow-y-auto max-h-[60vh] pr-2">
+                <div className="space-y-4">
+                    {chatHistory.length > 0 ? (
+                    chatHistory.map((msg, idx) => (
+                        <div
+                        key={idx}
+                        className={`max-w-[90%] px-4 py-3 rounded-md shadow-sm text-sm whitespace-pre-wrap leading-relaxed ${
+                            msg.role === 'user'
+                            ? 'ml-auto bg-primary text-primary-foreground'
+                            : 'bg-muted text-muted-foreground'
+                        }`}
+                        >
+                        {msg.content}
+                        </div>
+                    ))
+                    ) : (
+                    <p className="italic text-muted-foreground">
+                        Ask a question about the selected file.
                     </p>
-                  </div>
-                ))
-              ) : (
-                <p className="italic text-muted-foreground">
-                  Ask a question about the selected file.
-                </p>
-              )}
-            </div>
+                    )}
+                </div>
+            </ScrollArea>
+
+
 
             {/* Input and Send Button */}
             <div className="flex gap-2">
