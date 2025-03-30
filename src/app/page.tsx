@@ -11,6 +11,7 @@ import debounce from 'lodash.debounce'
 
 export default function HomePage() {
   const [username, setUsername] = useState('')
+  const [activeUsername, setActiveUsername] = useState('') 
   const [repos, setRepos] = useState<any[]>([])
   const [suggestions, setSuggestions] = useState<string[]>([])
   const [selected, setSelected] = useState(false)
@@ -51,23 +52,24 @@ export default function HomePage() {
   }, [username])
 
   // Fetch repos and profile summary
-  const fetchRepos = async () => {
-    setLoading(true) // <-- Start loading
+  const fetchRepos = async (finalUsername: string) => {
+    setLoading(true)
     try {
-      const res = await fetch(`https://api.github.com/users/${username}/repos`, {
+      const res = await fetch(`https://api.github.com/users/${finalUsername}/repos`, {
         headers: { Authorization: `token ${process.env.NEXT_PUBLIC_GITHUB_TOKEN}` },
       })
       const data = await res.json()
       setRepos(data)
       setSelected(true)
       setCurrentPage(1)
+      setActiveUsername(finalUsername) // 🔐 LOCK THE SELECTED USERNAME
   
       if (data.length === 0) {
         setSummary(null)
         return
       }
   
-      const readmeRes = await fetch(`https://api.github.com/repos/${username}/${username}/readme`, {
+      const readmeRes = await fetch(`https://api.github.com/repos/${finalUsername}/${finalUsername}/readme`, {
         headers: { Authorization: `token ${process.env.NEXT_PUBLIC_GITHUB_TOKEN}` },
       })
   
@@ -89,17 +91,17 @@ export default function HomePage() {
       console.error('❌ Error fetching profile or summary:', err)
       setSummary(null)
     } finally {
-      setLoading(false) // <-- End loading
+      setLoading(false)
     }
   }
+  
   
   
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
-      setSelected(true)
-      setSuggestions([]) 
-      fetchRepos()
+      setSuggestions([])
+      fetchRepos(username)
     }
   }
   
@@ -147,8 +149,8 @@ export default function HomePage() {
               </ul>
             )}
           </div>
-          <Button onClick={fetchRepos}>Search</Button>
-        </div>
+          <Button onClick={() => fetchRepos(username)}>Search</Button>
+          </div>
 
         {/* Profile Card */}
         {loading ? (
@@ -157,18 +159,18 @@ export default function HomePage() {
             <Card className="max-w-4xl mx-auto border border-border bg-muted/30 hover:shadow-lg transition">
               <div className="flex items-start gap-6 p-6">
                 <Avatar className="w-16 h-16">
-                  <img
-                    src={`https://github.com/${username}.png`}
-                    alt={`${username}'s avatar`}
-                    className="rounded-full"
-                  />
+                <img
+                  src={`https://github.com/${activeUsername}.png`}
+                  alt={`${activeUsername}'s avatar`}
+                  className="rounded-full"
+                />
                   <AvatarFallback>{username.charAt(0).toUpperCase()}</AvatarFallback>
                 </Avatar>
                 <div className="flex-1">
                   <div className="flex items-center justify-between mb-2">
-                    <CardTitle className="text-2xl text-primary">{username}</CardTitle>
+                    <CardTitle className="text-2xl text-primary">{activeUsername}</CardTitle>
                     <a
-                      href={`https://github.com/${username}`}
+                      href={`https://github.com/${activeUsername}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-sm text-blue-500 hover:underline"
