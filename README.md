@@ -2,6 +2,7 @@
 
 **Explainify** is a web-based SaaS application that integrates GitHub’s REST and Search APIs with OpenAI's GPT-3.5 Turbo to provide role-specific, natural language explanations of source code. The platform helps developers, interns, designers, and product managers navigate unfamiliar repositories more effectively by generating contextual, persona-aware insights.
 
+![alt text](image.png)
 ## Features
 
 - **GitHub User Search**  
@@ -22,6 +23,17 @@
 - **Context-Aware Chat Interface**  
   Ask follow-up questions about code, with preserved conversational memory per session to enable deeper understanding.
 
+
+
+## 📸 Snapshots of Interface
+
+Below are key interface snapshots from Explainify, highlighting its user-centric features and AI-powered code comprehension flow.
+
+![alt text](image-3.png)
+
+![alt text](image-2.png)
+
+![alt text](image-1.png)
 ## Getting Started
 
 Clone the repository and install dependencies:
