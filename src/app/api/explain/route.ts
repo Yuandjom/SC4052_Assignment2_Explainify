@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid role selected' }, { status: 400 })
     }
 
-    // ✅ TypeScript now knows role is RoleType
+    // TypeScript now knows role is RoleType
     const typedRole = role as RoleType
     const prompt = `${rolePrompt[typedRole]}\n\nCode:\n${code}`
 
